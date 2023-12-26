@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/test-golevelup/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/test-golevelup/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/test-golevelup",
+  "projects": {
+    "test-golevelup": {
+      "type": "application",
+      "root": "apps/test-golevelup",
+      "entryFile": "main",
+      "sourceRoot": "apps/test-golevelup/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/test-golevelup/tsconfig.app.json"
+      }
+    },
+    "ms1": {
+      "type": "application",
+      "root": "apps/ms1",
+      "entryFile": "main",
+      "sourceRoot": "apps/ms1/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ms1/tsconfig.app.json"
+      }
+    },
+    "ms2": {
+      "type": "application",
+      "root": "apps/ms2",
+      "entryFile": "main",
+      "sourceRoot": "apps/ms2/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ms2/tsconfig.app.json"
+      }
+    },
+    "primary-rabbitmq": {
+      "type": "library",
+      "root": "libs/primary-rabbitmq",
+      "entryFile": "index",
+      "sourceRoot": "libs/primary-rabbitmq/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/primary-rabbitmq/tsconfig.lib.json"
+      }
+    },
+    "proxy": {
+      "type": "library",
+      "root": "libs/proxy",
+      "entryFile": "index",
+      "sourceRoot": "libs/proxy/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/proxy/tsconfig.lib.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/test-golevelup/Dockerfile
+      target: development
+    command: sh -c "/wait && npm run start:dev"
+    env_file:
+      - ./.env
+    environment:
+      WAIT_HOSTS: "rabbitmq:5672"
+    depends_on:
+      - ms2
+      - ms1
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/dist
+      - ./node_modules:/usr/src/app/node_modules
+    ports:
+      - "${GATEWAY_PORT_EXTERNAL}:${GATEWAY_PORT_INTERNAL}"
+    networks:
+      - main-networks
+  ms2:
+    build:
+      context: .
+      dockerfile: ./apps/ms2/Dockerfile
+      target: development
+    command: sh -c "/wait && npm run start:dev ms2"
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
+    environment:
+      WAIT_HOSTS: "${RMQ_HOST}:${RMQ_PORT}"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/dist
+      - ./node_modules:/usr/src/app/node_modules
+    networks:
+      - main-networks
+  ms1:
+    build:
+      context: .
+      dockerfile: ./apps/ms1/Dockerfile
+      target: development
+    command: sh -c "/wait && npm run start:dev ms1"
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
+    environment:
+      WAIT_HOSTS: "${RMQ_HOST}:${RMQ_PORT}"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/dist
+      - ./node_modules:/usr/src/app/node_modules
+    networks:
+      - main-networks
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    ports:
+      - "${RMQ_PORT_EXTERNAL}:${RMQ_PORT}"
+      - "${RMQ_PORT_EXTERNAL_2}:${RMQ_PORT_INTERNAL_2}"
+    networks:
+      - main-networks
+
+networks:
+  main-networks:
